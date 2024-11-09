@@ -1,5 +1,4 @@
 import './App.scss'
-import '@styles/examplePage.scss'
 
 import { DrawingBoard } from '@components'
 
