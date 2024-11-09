@@ -12,7 +12,11 @@
     "lines_of_code_dist": "cloc --exclude-dir=node_modules --not-match-f='.*\\.(svg|md|toml)' dist"
   },
   "dependencies": {
+<<<<<<< HEAD
     "lucide-react": "^0.454.0",
+=======
+    "lucide-react": "^0.456.0",
+>>>>>>> 64f829157fe89287cf7675391836aa2966c58b28
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",

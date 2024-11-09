@@ -1,0 +1,40 @@
+.color-picker-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  
+  .color-picker-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    background-color: #E3F2FD;
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 101;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 200px;
+  }
+  
+  .color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s;
+  }
+  
+  .color-option:hover {
+    transform: scale(1.1);
+  }
