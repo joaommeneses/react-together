@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from "react";
 import '@styles/DrawingBoard.css'
 import { useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
+import { SessionManager } from 'react-together';
+import { Session } from "inspector/promises";
 
 export type Coords = {
     x: number,
@@ -153,6 +155,7 @@ export function DrawingBoard() {
                 onMouseLeave={finishDrawing}
                 className="drawing-board"
             />
+            <SessionManager />
         </div>
     );
 };
