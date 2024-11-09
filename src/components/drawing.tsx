@@ -21,7 +21,7 @@ export type Line = {
 export function DrawingBoard() {
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef(null);
-    const contextRef = useRef<CanvasRenderingContext2D|null>(null);
+    const contextRef = useRef<CanvasRenderingContext2D | null>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [color, setColor] = useState("black");
     const [lineWidth, setLineWidth] = useState(5);
@@ -43,6 +43,7 @@ export function DrawingBoard() {
             contextRef.current = context;
             setContext(context);
         } else {
+            clearCanvas();
             lines.forEach((line) => {
                 const new_line = interpolate_line(line);
                 contextRef.current.beginPath();
@@ -76,7 +77,7 @@ export function DrawingBoard() {
             color: color,
             lineWidth: lineWidth,
         };
-        
+
         const l: Line = {
             points: [p],
             color: color,
@@ -119,7 +120,6 @@ export function DrawingBoard() {
 
     const clearCanvas = () => {
         contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        setLines([]);
     };
 
     return (
@@ -156,3 +156,5 @@ export function DrawingBoard() {
         </div>
     );
 };
+
+export default DrawingBoard;
