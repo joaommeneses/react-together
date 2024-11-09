@@ -1,18 +1,10 @@
-import './App.scss';
-import '@styles/examplePage.scss';
+import './App.scss'
+import '@styles/examplePage.scss'
 
-import { useStateTogether } from 'react-together';
-import Whiteboard from './components/Whiteboard';
+import { DrawingBoard } from '@components'
 
 export default function App() {
-  // Example of using state synchronization in App.tsx
   return (
-    <div>
-      <div className='card'>
-
-      </div>
-
-      <Whiteboard />
-    </div>
-  );
+    <DrawingBoard />
+  )
 }
