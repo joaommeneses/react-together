@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Pencil, Eraser, Trash2 } from 'lucide-react';
+import { useStateTogether } from 'react-together';
 import ColorPicker from './ColorPicker';
 import './Whiteboard.css';
 
@@ -16,15 +17,18 @@ const ERASER_SIZES = [8, 20, 40];
 const Whiteboard: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [drawPath, setDrawPath] = useState<DrawPoint[][]>([]);
-  const [pathSettings, setPathSettings] = useState<DrawSettings[]>([]);
-  const [currentSettings, setCurrentSettings] = useState<DrawSettings>({
+  const [isDrawing, setIsDrawing] = useStateTogether('isDrawing', false);
+  const [drawPath, setDrawPath] = useStateTogether('drawPath', [] as DrawPoint[][]);
+  const [pathSettings, setPathSettings] = useStateTogether('pathSettings', []);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useStateTogether('isColorPickerOpen', false);
+
+  // Group color, lineWidth, and tool into a single state object for easier management
+  const [currentSettings, setCurrentSettings] = useStateTogether('currentSettings', {
     color: '#000000',
     lineWidth: PENCIL_SIZES[1],
     tool: 'pencil'
   });
-  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -90,7 +94,16 @@ const Whiteboard: React.FC = () => {
   };
 
   const finishDrawing = () => {
+    if (!isDrawing) return;
+
     setIsDrawing(false);
+    // Synchronize the drawn line only when the user stops drawing
+    // Note: Here, we trigger synchronization once the user stops
+    const currentLine = drawPath[drawPath.length - 1];
+    setDrawPath((prevDrawPath) => [...prevDrawPath, currentLine]); // Add the finished line
+
+    // Sync logic can be placed here (e.g., send the line to a server or store)
+    console.log("Line synchronized:", currentLine); // Example for synchronization
   };
 
   const draw = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
@@ -106,8 +119,11 @@ const Whiteboard: React.FC = () => {
   };
 
   const clearCanvas = () => {
-    setDrawPath([]);
-    setPathSettings([]);
+    if (contextRef.current && canvasRef.current) {
+      contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      setDrawPath([]); // Clear the synchronized drawing path
+      setPathSettings([]);
+    }    
   };
 
   const getSizeButtons = () => {
