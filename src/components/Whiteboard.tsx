@@ -10,9 +10,7 @@ const Whiteboard: React.FC = () => {
   const [isDrawing, setIsDrawing] = useStateTogether('isDrawing', false);
   const [color, setColor] = useStateTogether('color', 'black');
   const [lineWidth, setLineWidth] = useStateTogether('lineWidth', 5);
-  const [drawPath, setDrawPath] = useStateTogether('drawPath', [] as DrawPoint[][]); // Only store small part of path in state
-
-  const localStorageKey = 'drawingPath'; // Key for local storage
+  const [drawPath, setDrawPath] = useStateTogether('drawPath', [] as DrawPoint[][]); // Array of lines
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -25,15 +23,9 @@ const Whiteboard: React.FC = () => {
         contextRef.current = context;
       }
     }
-
-    // Load the drawing path from localStorage if available
-    const storedPath = localStorage.getItem(localStorageKey);
-    if (storedPath) {
-      setDrawPath(JSON.parse(storedPath));
-    }
   }, []);
 
-  // Draw all lines in drawPath (only renders the small part from state)
+  // Draw all lines in drawPath
   useEffect(() => {
     if (contextRef.current && canvasRef.current) {
       const context = contextRef.current;
@@ -52,20 +44,27 @@ const Whiteboard: React.FC = () => {
         });
         context.stroke();
       });
-
-      // Save the updated path to localStorage
-      localStorage.setItem(localStorageKey, JSON.stringify(drawPath));
     }
   }, [drawPath, color, lineWidth]);
 
   const startDrawing = ({ nativeEvent }: React.MouseEvent) => {
     const { offsetX, offsetY } = nativeEvent;
     setIsDrawing(true);
-    setDrawPath((paths) => [...paths, [{ x: offsetX, y: offsetY }]]); // Start new line
+    // Start a new line
+    setDrawPath((paths) => [...paths, [{ x: offsetX, y: offsetY }]]);
   };
 
   const finishDrawing = () => {
+    if (!isDrawing) return;
+
     setIsDrawing(false);
+    // Synchronize the drawn line only when the user stops drawing
+    // Note: Here, we trigger synchronization once the user stops
+    const currentLine = drawPath[drawPath.length - 1];
+    setDrawPath((prevDrawPath) => [...prevDrawPath, currentLine]); // Add the finished line
+
+    // Sync logic can be placed here (e.g., send the line to a server or store)
+    console.log("Line synchronized:", currentLine); // Example for synchronization
   };
 
   const draw = ({ nativeEvent }: React.MouseEvent) => {
@@ -98,7 +97,6 @@ const Whiteboard: React.FC = () => {
     if (contextRef.current && canvasRef.current) {
       contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       setDrawPath([]); // Clear the synchronized drawing path
-      localStorage.removeItem(localStorageKey); // Clear local storage as well
     }
   };
 
