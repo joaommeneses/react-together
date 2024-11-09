@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import '@styles/DrawingBoard.css'
-import { useStateTogether } from "react-together";
+import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
 import { Session } from "inspector/promises";
@@ -25,8 +25,8 @@ export function DrawingBoard() {
     const canvasRef = useRef(null);
     const contextRef = useRef<CanvasRenderingContext2D|null>(null);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [color, setColor] = useStateTogether('henrique_color', "black");
-    const [lineWidth, setLineWidth] = useStateTogether('henrique_width', 5);
+    const [color, setColor] = useState("black");
+    const [lineWidth, setLineWidth] = useState(5);
     const [lines, setLines] = useStateTogether<Line[]>('all_of_the_lines', []);
     const [line, setLine] = useState<Line | null>(null);
     var num_points = 0;
@@ -45,7 +45,7 @@ export function DrawingBoard() {
             contextRef.current = context;
             setContext(context);
         } else {
-            clearCanvas();
+            contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
             lines.forEach((line) => {
                 const new_line = interpolate_line(line);
                 contextRef.current.beginPath();
@@ -120,9 +120,10 @@ export function DrawingBoard() {
         num_points++;
     };
 
-    const clearCanvas = () => {
+    const clearCanvas = useFunctionTogether('clear', () => {
         contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    };
+        setLines([]);
+    });
 
     return (
         <div>
@@ -145,7 +146,7 @@ export function DrawingBoard() {
                         value={lineWidth}
                     />
                 </label>
-                <button onClick={clearCanvas}>Clear</button>
+                <button onClick={() => clearCanvas()}>Clear</button>
             </div>
             <canvas
                 ref={canvasRef}
