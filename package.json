@@ -1,0 +1,34 @@
+{
+  "name": "hacktogether-template",
+  "description": "Template project for HackTogether",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm -f package-lock.json && rm -f bun.lockb",
+    "lines_of_code": "cloc --exclude-dir=node_modules --not-match-f='.*\\.(svg|md|toml)' .",
+    "lines_of_code_dist": "cloc --exclude-dir=node_modules --not-match-f='.*\\.(svg|md|toml)' dist"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-together": "0.2.0"
+  },
+  "devDependencies": {
+    "@modyfi/vite-plugin-yaml": "^1.1.0",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "sass": "^1.79.4",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8",
+    "vite-tsconfig-paths": "^4.3.2"
+  }
+}
