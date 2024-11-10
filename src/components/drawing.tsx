@@ -183,6 +183,16 @@ export function DrawingBoard() {
 
     let sessionUrl = ''; // Global or higher scope
 
+    const generatePDF = () => { //aaaaaaaaa
+
+        const doc = new jsPDF();
+
+        const canvasImage = canvasRef.current.toDataURL("image/png");
+
+        doc.addImage(canvasImage, 'PNG', 10, 10, 190, 160);
+
+        doc.save('drawing-board.pdf');
+    };
 
     return (
         <div>
@@ -221,6 +231,7 @@ export function DrawingBoard() {
                             <div className="size-controls">
                                 {getSizeButtons()}
                                 <button className="clear-btn" onClick={clearCanvas}>
+                                    <button onClick={generatePDF}>Download as PDF</button>
                                     <Trash2 size={20} />
                                 </button>
                             </div>
