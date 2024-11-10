@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 
 import {
     FormContainer,
@@ -19,6 +20,7 @@ import { Button } from '../styles/AuthStyles';
 
 const RegisterForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -74,8 +76,12 @@ const RegisterForm: React.FC = () => {
                     email: formData.email,
                     role: formData.role // Store role as "Student" or "Professor"
                 });
-                navigate('/student'); // Redirect to the whiteboard page
                 toast.success('Registration successful!');
+                if (formData.role === "Student") {
+                    navigate('/student');
+                } else if (formData.role === "Professor") {
+                    navigate('/teacher');
+                }
             } catch (error) {
                 console.error('Error registering user:', error);
                 toast.error('Registration failed. Please try again.');

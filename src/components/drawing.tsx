@@ -12,6 +12,7 @@ import ColorPicker from "./ColorPicker";
 import { useConnectedUsers } from 'react-together'
 import { useJoinUrl } from 'react-together'
 import { useAuth } from '../context/AuthContext'; // Import useAuth to access the logout function
+import SignOutButton from "./SignOutButton";
 
 export type Coords = {
     x: number,
@@ -276,6 +277,7 @@ export function DrawingBoard() {
                             )}
                         </div>
                     </div>
+                    <SignOutButton />
                 </header>
                 <canvas
                     ref={canvasRef}
