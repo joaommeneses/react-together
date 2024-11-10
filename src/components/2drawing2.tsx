@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import '@styles/DrawingBoard.css'
+import '@styles/DrawingBoard.css';
 import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
-import { jsPDF } from "jspdf"; //aaaaaaaaa
+import { jsPDF } from "jspdf";
+import { loadPdf } from './pdf'; // Import the loadPdf function
 
 export type Coords = {
     x: number,
@@ -22,19 +23,18 @@ export type Line = {
 
 export function DrawingBoard() {
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-    const canvasRef = useRef(null);
-    const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-    const [isDrawing, setIsDrawing] = useState(false);
+    const [pdfBackground, setPdfBackground] = useState(null); // State to store PDF background
     const [color, setColor] = useState("black");
     const [lineWidth, setLineWidth] = useState(5);
     const [lines, setLines] = useStateTogether<Line[]>('all_of_the_lines', []);
     const [line, setLine] = useState<Line | null>(null);
+    const canvasRef = useRef(null);
+    const contextRef = useRef<CanvasRenderingContext2D | null>(null);
     var num_points = 0;
     const MOD = 3;
 
     useEffect(() => {
         if (context === null) {
-            setLines([]);
             const canvas = canvasRef.current;
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -46,6 +46,13 @@ export function DrawingBoard() {
             setContext(context);
         } else {
             contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            
+            // Draw PDF background if it's loaded
+            if (pdfBackground) {
+                contextRef.current.drawImage(pdfBackground, 0, 0, canvasRef.current.width, canvasRef.current.height);
+            }
+
+            // Draw all lines
             lines.forEach((line) => {
                 const new_line = interpolate_line(line);
                 contextRef.current.beginPath();
@@ -60,13 +67,11 @@ export function DrawingBoard() {
                 }
             });
 
-            context.lineCap = "round";
-            context.strokeStyle = color;
-            context.lineWidth = lineWidth;
-            contextRef.current = context;
-            setContext(context);
+            contextRef.current.lineCap = "round";
+            contextRef.current.strokeStyle = color;
+            contextRef.current.lineWidth = lineWidth;
         }
-    }, [color, lineWidth, lines]);
+    }, [color, lineWidth, lines, pdfBackground]); // Include pdfBackground as a dependency
 
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
@@ -84,7 +89,7 @@ export function DrawingBoard() {
             points: [p],
             color: color,
             lineWidth: lineWidth,
-        }
+        };
         setLine(l);
     };
 
@@ -109,7 +114,7 @@ export function DrawingBoard() {
         contextRef.current.lineTo(offsetX, offsetY);
         contextRef.current.stroke();
 
-        if (num_points % MOD == 0) {
+        if (num_points % MOD === 0) {
             const p = {
                 coords: { x: offsetX, y: offsetY },
                 color: color,
@@ -123,22 +128,36 @@ export function DrawingBoard() {
     const clearCanvas = useFunctionTogether('clear', () => {
         contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         setLines([]);
+        setPdfBackground(null); // Clear the PDF background when clearing the canvas
     });
 
-    const generatePDF = () => { //aaaaaaaaa
-
+    const generatePDF = () => {
         const doc = new jsPDF();
-
         const canvasImage = canvasRef.current.toDataURL("image/png");
-
         doc.addImage(canvasImage, 'PNG', 10, 10, 190, 160);
-
         doc.save('drawing-board.pdf');
     };
 
-    return (//aaaaaaaaa
+    // Handle PDF file upload
+    const handlePdfUpload = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const canvas = await loadPdf(file); // Load PDF and get the canvas
+                setPdfBackground(canvas); // Set the canvas as the background
+            } catch (error) {
+                console.error("Error loading PDF:", error);
+            }
+        }
+    };
+
+    return (
         <div>
             <div className="toolbar">
+                <label>
+                    Upload PDF:
+                    <input type="file" onChange={handlePdfUpload} />
+                </label>
                 <label>
                     Brush Color:
                     <input
@@ -158,7 +177,7 @@ export function DrawingBoard() {
                     />
                 </label>
                 <button onClick={() => clearCanvas()}>Clear</button>
-                <button onClick={generatePDF}>Download as PDF</button> {/* Add PDF button */} 
+                <button onClick={generatePDF}>Download as PDF</button> {/* Add PDF button */}
             </div>
             <canvas
                 ref={canvasRef}
@@ -173,4 +192,4 @@ export function DrawingBoard() {
     );
 };
 
-export default DrawingBoard;
+export default DrawingBoard;
