@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useState } from 'react';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 interface User {
-    username: string;
+    email: string;
 }
 
 interface AuthContextType {
     user: User | null;
-    login: (username: string, password: string) => void;
-    register: (username: string, password: string) => void;
+    login: (email: string, password: string) => Promise<void>;
+    register: (email: string, password: string) => Promise<void>;
     logout: () => void;
 }
 
@@ -15,32 +17,35 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [users, setUsers] = useState<{ username: string; password: string }[]>([]);
 
-    const login = (username: string, password: string) => {
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if (user) {
-            setUser({ username: user.username });
-            alert('Successfully logged in!');
-        } else {
-            alert('Invalid credentials');
+    // Firebase login method
+    const login = async (email: string, password: string): Promise<void> => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            setUser({ email: userCredential.user.email! });
+        } catch (error) {
+            throw new Error('Login failed. Please check your credentials.');
         }
     };
 
-    const register = (username: string, password: string) => {
-        if (users.some(u => u.username === username)) {
-            alert('Username already exists');
-            return;
+    // Firebase register method
+    const register = async (email: string, password: string): Promise<void> => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            setUser({ email: userCredential.user.email! });
+        } catch (error) {
+            throw new Error('Registration failed. Please try again.');
         }
-
-        setUsers(prev => [...prev, { username, password }]);
-        setUser({ username });
-        alert('Successfully registered!');
     };
 
-    const logout = () => {
-        setUser(null);
+    // Firebase logout method
+    const logout = async (): Promise<void> => {
+        try {
+            await signOut(auth);
+            setUser(null);
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
     };
 
     return (
