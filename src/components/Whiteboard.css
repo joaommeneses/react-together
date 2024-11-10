@@ -1,190 +1,176 @@
 /* Container */
 .whiteboard-container {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-  }
-  
-  /* Header */
-  .header {
-    background-color: #004d56;
-    color: white;
-    padding: 0;
-  }
-  
-  .header-top {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: #004d56;
-    position: relative;
-  }
-  
-  .header-top h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-  
-  .back-button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-  }
-  
-  /* Toolbar */
-  .toolbar {
-    background-color: #00838f;
-    padding: 0.75rem 1rem;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .toolbar-left {
-    justify-self: start;
-  }
-  
-  .toolbar-center {
-    justify-self: center;
-  }
-  
-  .toolbar-right {
-    justify-self: end;
-  }
-  
-  /* Size Controls */
-  .size-controls {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-  
-  .size-btn {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid white;
-    background-color: white;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-  }
-  
-  .size-btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background-color: #00838f;
-  }
-  
-  .size-btn.small::after {
-    width: 4px;
-    height: 4px;
-  }
-  
-  .size-btn.medium::after {
-    width: 8px;
-    height: 8px;
-  }
-  
-  .size-btn.large::after {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .size-btn.active {
-    background-color: #004d56;
-  }
-  
-  /* Clear Button */
-  .clear-btn {
-    background: none;
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    margin-left: 0.5rem;
-  }
-  
-  .clear-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Drawing Tools */
-  .drawing-tools {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .tool-btn {
-    background: none;
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-  }
-  
-  .tool-btn.active {
-    background-color: #004d56;
-  }
-  
-  /* Color Picker */
-  .color-picker-container {
-    position: relative;
-  }
-  
-  .color-picker-button {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
-    background: none;
-  }
-  
-  .color-preview {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    border-radius: 50%;
-    border: 2px solid white;
-  }
-  
-  /* Canvas */
-  .drawing-board {
-    flex: 1;
-    width: 100%;
-    height: calc(100vh - 120px);
-    background-color: white;
-    cursor: crosshair;
-    touch-action: none;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+}
+
+/* Header */
+.header {
+  background-color: #004d56;
+  position: relative; /* Ensures it sits above the toolbar */
+  z-index: 10;
+}
+
+.header-top {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.header-top h1 {
+  color: white;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.back-button {
+  position: absolute;
+  left: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Toolbar */
+.toolbar {
+  background-color: #00838f;
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative; /* Keeps it below the header */
+}
+
+/* Toolbar Layout */
+.toolbar-left, .toolbar-center, .toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust flex settings */
+.toolbar-left {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.toolbar-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.toolbar-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Other styles remain unchanged */
+.size-controls, .drawing-tools {
+  display: flex;
+  gap: 1rem;
+}
+
+.size-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+.size-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: #00838f;
+}
+
+.size-btn.small::after {
+  width: 6px;
+  height: 6px;
+}
+
+.size-btn.medium::after {
+  width: 12px;
+  height: 12px;
+}
+
+.size-btn.large::after {
+  width: 18px;
+  height: 18px;
+}
+
+.size-btn.active {
+  background-color: #004d56;
+  border-color: #004d56;
+}
+
+/* Main Tools */
+.drawing-tools {
+  display: flex;
+  gap: 1rem;
+}
+
+.tool-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.tool-btn.active {
+  background-color: #004d56;
+}
+
+/* Right Tools */
+.color-picker-container {
+  position: relative;
+}
+
+.color-picker-button {
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+}
+
+.color-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Canvas */
+.drawing-board {
+  flex: 1;
+  width: 100%;
+  background-color: white;
+  cursor: crosshair;
+  touch-action: none;
+}

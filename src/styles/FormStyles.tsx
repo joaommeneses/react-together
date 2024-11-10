@@ -14,6 +14,15 @@ export const FormContainer = ({ children, onSubmit }: {
     </form>
 );
 
+export const SelectWrapper = ({ children }: { children: React.ReactNode }) => (
+    <div style={{
+        marginBottom: '1rem',
+        position: 'relative'
+    }}>
+        {children}
+    </div>
+);
+
 export const InputGroup = ({ children }: { children: React.ReactNode }) => (
     <div style={{
         display: 'flex',
