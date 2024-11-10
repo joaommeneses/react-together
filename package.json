@@ -12,10 +12,12 @@
     "lines_of_code_dist": "cloc --exclude-dir=node_modules --not-match-f='.*\\.(svg|md|toml)' dist"
   },
   "dependencies": {
+    "firebase": "^11.0.1",
     "lucide-react": "^0.456.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
+    "react-toastify": "^10.0.6",
     "react-together": "0.2.0"
   },
   "devDependencies": {

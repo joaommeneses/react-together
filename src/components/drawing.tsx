@@ -1,25 +1,27 @@
 import { useRef, useState, useEffect } from "react";
-import '@styles/DrawingBoard.css'
+import '@styles/DrawingBoard.css';
 import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
+import { useAuth } from '../context/AuthContext'; // Import useAuth to access the logout function
 
 export type Coords = {
     x: number,
     y: number
-}
+};
 
 export type Point = {
     coords: Coords,
-}
+};
 
 export type Line = {
     points: Point[],
     color: string,
     lineWidth: number,
-}
+};
 
 export function DrawingBoard() {
+    const { logout } = useAuth(); // Access logout function
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef(null);
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -83,7 +85,7 @@ export function DrawingBoard() {
             points: [p],
             color: color,
             lineWidth: lineWidth,
-        }
+        };
         setLine(l);
     };
 
@@ -110,7 +112,7 @@ export function DrawingBoard() {
         contextRef.current.lineTo(offsetX, offsetY);
         contextRef.current.stroke();
 
-        if (num_points % MOD == 0) {
+        if (num_points % MOD === 0) {
             const p = {
                 coords: { x: offsetX, y: offsetY },
                 color: color,
@@ -126,8 +128,33 @@ export function DrawingBoard() {
         setLines([]);
     });
 
+    // Sign out button handler
+    const handleSignOut = async () => {
+        try {
+            await logout();
+            window.location.href = '/auth'; // Redirect to the authentication page after logout
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
+    };
+
     return (
-        <div>
+        <div className="relative">
+            <button
+                onClick={handleSignOut}
+                className="absolute top-4 right-4 bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    padding: '10px',
+                    backgroundColor: 'green',
+                    color: '#fff'
+                }}
+            >
+                Sign Out
+            </button>
+
             <div className="toolbar">
                 <label>
                     Brush Color:
@@ -149,6 +176,7 @@ export function DrawingBoard() {
                 </label>
                 <button onClick={() => clearCanvas()}>Clear</button>
             </div>
+
             <canvas
                 ref={canvasRef}
                 onMouseDown={startDrawing}
@@ -160,6 +188,6 @@ export function DrawingBoard() {
             <SessionManager />
         </div>
     );
-};
+}
 
 export default DrawingBoard;
