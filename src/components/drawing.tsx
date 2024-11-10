@@ -93,13 +93,15 @@ export function DrawingBoard() {
         contextRef.current.closePath();
         setIsDrawing(false);
 
-        const p = {
-            coords: { x: offsetX, y: offsetY },
-            color: color,
-            lineWidth: lineWidth,
-        };
-        line.points.push(p);
-        setLines([...lines, line]);
+        if (line) {
+            const p = {
+                coords: { x: offsetX, y: offsetY },
+                color: color,
+                lineWidth: lineWidth,
+            };
+            line.points.push(p);
+            setLines([...lines, line]);
+        }
         setLine(null);
     };
 
