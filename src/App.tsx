@@ -27,7 +27,7 @@ function App() {
                             path="/student"
                             element={
                                 <ProtectedRoute>
-                                    <DrawingBoard />
+                                    <StudentPage />
                                 </ProtectedRoute>
                             }
                         />
@@ -35,7 +35,7 @@ function App() {
                             path="/teacher"
                             element={
                                 <ProtectedRoute>
-                                    <DrawingBoard />
+                                    <TeacherPage />
                                 </ProtectedRoute>
                             }
                         />

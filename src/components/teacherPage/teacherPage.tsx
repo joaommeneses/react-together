@@ -1,6 +1,5 @@
 import { TopBar } from "@components/topbar";
 import { useNavigate } from "react-router-dom";
-import { SessionManager } from 'react-together';
 import './teacherPage.scss';
 
 export default function TeacherPage() {

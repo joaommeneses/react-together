@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { TopBar } from '@components/topbar';
 import './studentPage.scss';
-import { SessionManager } from 'react-together';
+import { useNavigate } from 'react-router-dom';
 
 export default function StudentPage() {
     const [link, setLink] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         setLink(event.target.value);
     }
     const joinClass = () => {
-        console.log("Joining class with link: " + link);
+        const url = new URL(link);
+        const path = url.pathname.split('/').pop();
+        const newLink = link.substring(link.indexOf(path));
+        window.location.href = newLink;
     }
 
     return (
