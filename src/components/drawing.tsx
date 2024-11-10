@@ -202,7 +202,7 @@ export function DrawingBoard() {
                     onClick={() => handleBoxClick(drawer)} // Remove from stack when clicked
                     style={{
                         position: 'absolute',
-                        top: `${100 + index * 40}px`, // Stack boxes vertically
+                        top: `${150 + index * 40}px`, // Stack boxes vertically
                         right: '10px',
                         backgroundColor: '#28a745',
                         padding: '8px 16px',
@@ -230,7 +230,7 @@ export function DrawingBoard() {
                         <div className="toolbar-left">
                             <div className="size-controls">
                                 {getSizeButtons()}
-                                <button className="clear-btn" onClick={clearCanvas}>
+                                <button className="clear-btn" onClick={() => clearCanvas()}>
                                     <button onClick={generatePDF}>Download as PDF</button>
                                     <Trash2 size={20} />
                                 </button>
