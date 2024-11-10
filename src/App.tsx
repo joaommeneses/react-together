@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import SignOutButton from '@components/SignOutButton';
 import { StudentPage } from '@components/studentPage';
+import { TeacherPage } from '@components/teacherPage';
 
 function App() {
     return (
@@ -27,6 +28,14 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <StudentPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/teacher"
+                            element={
+                                <ProtectedRoute>
+                                    <TeacherPage />
                                 </ProtectedRoute>
                             }
                         />

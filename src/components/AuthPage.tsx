@@ -23,7 +23,11 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/student');
+            if (user.role === "Student") {
+                navigate('/student');
+            } else if (user.role === "Professor") {
+                navigate('/teacher');
+            }
         }
     }, [user, navigate]);
 
