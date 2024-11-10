@@ -4,6 +4,8 @@ import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
 import { Session } from "inspector/promises";
+import { useConnectedUsers } from 'react-together'
+import { useJoinUrl } from 'react-together'
 
 export type Coords = {
     x: number,
@@ -27,8 +29,12 @@ export function DrawingBoard() {
     const [isDrawing, setIsDrawing] = useState(false);
     const [color, setColor] = useState("black");
     const [lineWidth, setLineWidth] = useState(5);
+    const joinUrl = useJoinUrl()
     const [lines, setLines] = useStateTogether<Line[]>('all_of_the_lines', []);
     const [line, setLine] = useState<Line | null>(null);
+    const connectedUsers = useConnectedUsers()
+  const currentUser = connectedUsers.find((user) => user.isYou);
+  const [drawerStack, setDrawerStack] = useStateTogether<string[]>('drawerStack',[]);
     var num_points = 0;
     const MOD = 3;
 
@@ -86,6 +92,16 @@ export function DrawingBoard() {
             lineWidth: lineWidth,
         }
         setLine(l);
+
+        if (currentUser) {
+            // Add to the stack only if the user is not already in it
+            setDrawerStack((prevStack) => {
+              if (!prevStack.includes(currentUser.name)) {
+                return [...prevStack, currentUser.name];  // Add user only if not already in stack
+              }
+              return prevStack;  // If already in stack, do nothing
+            });
+          }
     };
 
     const finishDrawing = ({ nativeEvent }) => {
@@ -125,8 +141,37 @@ export function DrawingBoard() {
         setLines([]);
     });
 
+    const handleBoxClick = (drawerName: string) => {
+        setDrawerStack((prevStack) => prevStack.filter((name) => name !== drawerName)); // Remove from the stack when clicked
+      };
+    
+      let sessionUrl = ''; // Global or higher scope
+
+      
     return (
         <div>
+
+{drawerStack.map((drawer, index) => (
+        <div
+          key={index}
+          onClick={() => handleBoxClick(drawer)} // Remove from stack when clicked
+          style={{
+            position: 'absolute',
+            top: `${10 + index * 40}px`, // Stack boxes vertically
+            right: '10px',
+            backgroundColor: '#28a745',
+            padding: '8px 16px',
+            borderRadius: '12px',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#fff',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            cursor: 'pointer',
+          }}
+        >
+          {drawer} has a doubt
+        </div>
+      ))}
             <div className="toolbar">
                 <label>
                     Brush Color:
@@ -147,6 +192,14 @@ export function DrawingBoard() {
                     />
                 </label>
                 <button onClick={() => clearCanvas()}>Clear</button>
+                <button
+  onClick={() => {
+    const newTab = window.open(joinUrl, '_blank');
+  }}
+>
+  Connect to a new session!
+</button>
+
             </div>
             <canvas
                 ref={canvasRef}
