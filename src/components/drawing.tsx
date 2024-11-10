@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import '@styles/DrawingBoard.css'
 import { ArrowLeft, Pencil, Eraser, Trash2 } from 'lucide-react';
-import { useFunctionTogether, useStateTogether } from "react-together";
+import { useFunctionTogether, useStateTogether, useLeaveSession, useCreateRandomSession } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
 import { jsPDF } from "jspdf"; //aaaaaaaaa
@@ -33,7 +33,6 @@ const PENCIL_SIZES = [2, 5, 10];
 const ERASER_SIZES = [8, 20, 40];
 
 export function DrawingBoard() {
-    const { logout } = useAuth(); // Access logout function
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef(null);
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -47,9 +46,12 @@ export function DrawingBoard() {
     const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
     const currentUser = connectedUsers.find((user) => user.isYou);
     const [drawerStack, setDrawerStack] = useStateTogether<string[]>('drawerStack', []);
+    const leaveSession = useLeaveSession()
+    const createRandomSession = useCreateRandomSession()
+
+
     var num_points = 0;
     const MOD = 3;
-
 
     useEffect(() => {
         if (context === null) {
@@ -179,6 +181,8 @@ export function DrawingBoard() {
 
     const handleBoxClick = (drawerName: string) => {
         setDrawerStack((prevStack) => prevStack.filter((name) => name !== drawerName)); // Remove from the stack when clicked
+        leaveSession();
+        createRandomSession();
     };
 
     let sessionUrl = ''; // Global or higher scope
@@ -231,9 +235,9 @@ export function DrawingBoard() {
                             <div className="size-controls">
                                 {getSizeButtons()}
                                 <button className="clear-btn" onClick={() => clearCanvas()}>
-                                    <button onClick={generatePDF}>Download as PDF</button>
                                     <Trash2 size={20} />
                                 </button>
+                                <button onClick={generatePDF}>Download as PDF</button>
                             </div>
                         </div>
 
