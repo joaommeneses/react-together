@@ -12,13 +12,16 @@
     "lines_of_code_dist": "cloc --exclude-dir=node_modules --not-match-f='.*\\.(svg|md|toml)' dist"
   },
   "dependencies": {
+    "jspdf": "^2.5.2",
     "firebase": "^11.0.1",
     "lucide-react": "^0.456.0",
+    "pdfjs-dist": "^4.8.69",
+    "qrcode.react": "^4.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
-    "react-toastify": "^10.0.6",
-    "react-together": "0.2.0"
+    "react-together": "0.2.0",
+    "react-toastify": "^10.0.6"
   },
   "devDependencies": {
     "@modyfi/vite-plugin-yaml": "^1.1.0",
@@ -31,6 +34,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.12",
     "sass": "^1.79.4",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
     "vite-tsconfig-paths": "^4.3.2"
