@@ -18,25 +18,19 @@ function App() {
                         <Route
                             path="/whiteboard"
                             element={
-                                <ProtectedRoute>
-                                    <DrawingBoard />
-                                </ProtectedRoute>
+                                <DrawingBoard />
                             }
                         />
                         <Route
                             path="/student"
                             element={
-                                <ProtectedRoute>
-                                    <StudentPage />
-                                </ProtectedRoute>
+                                <StudentPage />
                             }
                         />
                         <Route
                             path="/teacher"
                             element={
-                                <ProtectedRoute>
-                                    <TeacherPage />
-                                </ProtectedRoute>
+                                <TeacherPage />
                             }
                         />
                         <Route path="/" element={<Navigate to="/auth" replace />} />
