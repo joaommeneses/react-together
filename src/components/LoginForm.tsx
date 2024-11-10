@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import {
     FormContainer,
     InputGroup,
@@ -14,39 +16,44 @@ import { Button } from '../styles/AuthStyles';
 const LoginForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: ''
     });
 
     const [errors, setErrors] = useState({
-        username: '',
+        email: '',
         password: ''
     });
 
     const validateForm = () => {
         const newErrors = {
-            username: '',
+            email: '',
             password: ''
         };
 
-        if (formData.username.length < 3) {
-            newErrors.username = 'Username must be at least 3 characters';
-        }
-
-        if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            newErrors.email = 'Invalid email format';
         }
 
         setErrors(newErrors);
         return !Object.values(newErrors).some(error => error !== '');
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validateForm()) {
-            login(formData.username, formData.password);
+            try {
+                await login(formData.email, formData.password);
+                toast.success('Login successful!');
+                navigate('/whiteboard'); // Redirect to the whiteboard page
+            } catch (error) {
+                console.error('Error logging in:', error);
+                toast.error('Login failed. Please check your credentials.');
+            }
         }
     };
 
@@ -65,13 +72,13 @@ const LoginForm: React.FC = () => {
                         <User style={{ width: '1.25rem', height: '1.25rem' }} />
                     </IconWrapper>
                     <Input
-                        name="username"
+                        name="email"
                         type="text"
-                        value={formData.username}
+                        value={formData.email}
                         onChange={handleChange}
-                        placeholder="Username"
+                        placeholder="Email"
                     />
-                    {errors.username && <ErrorText>{errors.username}</ErrorText>}
+                    {errors.email && <ErrorText>{errors.email}</ErrorText>}
                 </InputWrapper>
 
                 <InputWrapper>
@@ -85,13 +92,14 @@ const LoginForm: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Password"
                     />
-                    <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        right: '0.75rem',
-                        cursor: 'pointer'
-                    }}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            right: '0.75rem',
+                            cursor: 'pointer'
+                        }}
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? (
@@ -104,7 +112,7 @@ const LoginForm: React.FC = () => {
                 </InputWrapper>
             </InputGroup>
 
-            <Button type="submit">Sign in</Button>
+            <Button type="submit">Log in</Button>
         </FormContainer>
     );
 };

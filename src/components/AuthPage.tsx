@@ -4,6 +4,9 @@ import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import { Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
     AuthContainer,
     AuthCard,
@@ -44,6 +47,7 @@ const AuthPage: React.FC = () => {
                         {isLogin ? 'Sign up' : 'Sign in'}
                     </Button>
                 </Text>
+                <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
                 {isLogin ? <LoginForm /> : <RegisterForm />}
             </AuthCard>
