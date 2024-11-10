@@ -3,7 +3,6 @@ import '@styles/DrawingBoard.css'
 import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
-import { Session } from "inspector/promises";
 
 export type Coords = {
     x: number,
