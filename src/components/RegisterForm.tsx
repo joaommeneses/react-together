@@ -83,7 +83,7 @@ const RegisterForm: React.FC = () => {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData(prev => ({
             ...prev,
             [e.target.name]: e.target.value
@@ -153,7 +153,7 @@ const RegisterForm: React.FC = () => {
                         <select
                             name="role"
                             value={formData.role}
-                            onChange={handleChange}
+                            onChange={handleChange} // onChange should work here
                             style={{ width: '100%', padding: '0.5rem' }}
                         >
                             <option value="Professor">Professor</option>
