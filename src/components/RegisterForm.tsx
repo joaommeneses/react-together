@@ -74,7 +74,7 @@ const RegisterForm: React.FC = () => {
                     email: formData.email,
                     role: formData.role // Store role as "Student" or "Professor"
                 });
-                navigate('/whiteboard'); // Redirect to the whiteboard page
+                navigate('/student'); // Redirect to the whiteboard page
                 toast.success('Registration successful!');
             } catch (error) {
                 console.error('Error registering user:', error);

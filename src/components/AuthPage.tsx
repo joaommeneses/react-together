@@ -23,7 +23,7 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/whiteboard');
+            navigate('/student');
         }
     }, [user, navigate]);
 

@@ -49,7 +49,7 @@ const LoginForm: React.FC = () => {
             try {
                 await login(formData.email, formData.password);
                 toast.success('Login successful!');
-                navigate('/whiteboard'); // Redirect to the whiteboard page
+                navigate('/student'); // Redirect to the whiteboard page
             } catch (error) {
                 console.error('Error logging in:', error);
                 toast.error('Login failed. Please check your credentials.');

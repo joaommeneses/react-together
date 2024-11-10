@@ -1,0 +1,20 @@
+.linkInput {
+  padding: 16px;
+  margin: 8px 0;
+}
+
+.joinButton {
+  padding: 16px;
+  margin: 8px 0;
+}
+
+.column {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  gap: 16px;
+}

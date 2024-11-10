@@ -1,0 +1,49 @@
+.topBar {
+  background-color: #004d56;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10%;
+}
+
+.userLogo {
+  color: #FFFFFF;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 4px;
+  padding-right: 10px;
+  height: 90%;
+}
+
+.logoButton {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}
+
+.popUp {
+  position: absolute;
+  top: 50%;
+  right: 2.5%;
+  width: 100px;
+  background-color: #FFFFFF;
+  border: 1px solid #004d56;
+  border-radius: 20px;
+}
+
+.popUpContent {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
