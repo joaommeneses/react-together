@@ -16,6 +16,7 @@ import { Button } from '../styles/AuthStyles';
 const LoginForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -49,7 +50,12 @@ const LoginForm: React.FC = () => {
             try {
                 await login(formData.email, formData.password);
                 toast.success('Login successful!');
-                navigate('/whiteboard'); // Redirect to the whiteboard page
+                console.log(user);
+                if (user.role === "Student") {
+                    navigate('/student');
+                } else if (user.role === "Professor") {
+                    navigate('/teacher');
+                }
             } catch (error) {
                 console.error('Error logging in:', error);
                 toast.error('Login failed. Please check your credentials.');

@@ -1,0 +1,22 @@
+.column {
+    display: flex;
+    flex-direction: column;    /* Stack items vertically */
+    align-items: center;       /* Center items horizontally */
+    justify-content: center;   /* Center items vertically */
+    height: 100vh;             /* Optional: centers vertically within viewport */
+}
+
+.linkInput {
+    width: 300px;              /* Adjust width as needed */
+    padding: 10px;
+    margin-bottom: 15px;       /* Space between input and button */
+    font-size: 16px;
+}
+
+.joinButton {
+    width: 100px;              /* Button width */
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+

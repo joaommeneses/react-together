@@ -1,28 +1,30 @@
 import { useRef, useState, useEffect } from "react";
-import '@styles/DrawingBoard.css'
+import '@styles/DrawingBoard.css';
 import { useFunctionTogether, useStateTogether } from "react-together";
 import { interpolate_line } from "@hooks";
 import { SessionManager } from 'react-together';
 import { Session } from "inspector/promises";
 import { useConnectedUsers } from 'react-together'
 import { useJoinUrl } from 'react-together'
+import { useAuth } from '../context/AuthContext'; // Import useAuth to access the logout function
 
 export type Coords = {
     x: number,
     y: number
-}
+};
 
 export type Point = {
     coords: Coords,
-}
+};
 
 export type Line = {
     points: Point[],
     color: string,
     lineWidth: number,
-}
+};
 
 export function DrawingBoard() {
+    const { logout } = useAuth(); // Access logout function
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef(null);
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -90,7 +92,7 @@ export function DrawingBoard() {
             points: [p],
             color: color,
             lineWidth: lineWidth,
-        }
+        };
         setLine(l);
 
         if (currentUser) {
@@ -109,13 +111,15 @@ export function DrawingBoard() {
         contextRef.current.closePath();
         setIsDrawing(false);
 
-        const p = {
-            coords: { x: offsetX, y: offsetY },
-            color: color,
-            lineWidth: lineWidth,
-        };
-        line.points.push(p);
-        setLines([...lines, line]);
+        if (line) {
+            const p = {
+                coords: { x: offsetX, y: offsetY },
+                color: color,
+                lineWidth: lineWidth,
+            };
+            line.points.push(p);
+            setLines([...lines, line]);
+        }
         setLine(null);
     };
 
@@ -125,7 +129,7 @@ export function DrawingBoard() {
         contextRef.current.lineTo(offsetX, offsetY);
         contextRef.current.stroke();
 
-        if (num_points % MOD == 0) {
+        if (num_points % MOD === 0) {
             const p = {
                 coords: { x: offsetX, y: offsetY },
                 color: color,
@@ -201,6 +205,7 @@ export function DrawingBoard() {
 </button>
 
             </div>
+
             <canvas
                 ref={canvasRef}
                 onMouseDown={startDrawing}
@@ -212,6 +217,6 @@ export function DrawingBoard() {
             <SessionManager />
         </div>
     );
-};
+}
 
 export default DrawingBoard;
