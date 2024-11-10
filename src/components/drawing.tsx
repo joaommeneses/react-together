@@ -192,7 +192,7 @@ export function DrawingBoard() {
                     onClick={() => handleBoxClick(drawer)} // Remove from stack when clicked
                     style={{
                         position: 'absolute',
-                        top: `${10 + index * 40}px`, // Stack boxes vertically
+                        top: `${100 + index * 40}px`, // Stack boxes vertically
                         right: '10px',
                         backgroundColor: '#28a745',
                         padding: '8px 16px',
