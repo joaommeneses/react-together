@@ -1,0 +1,9 @@
+.createWhiteboard {
+    display: flex;
+    flex-direction: column;    /* Stack items vertically */
+    align-items: center;       /* Center items horizontally */
+    justify-content: center;   /* Center items vertically */
+    position: absolute;        /* Position in center of viewport */
+    top: 50%;                  /* Position 50% from top */
+    left: 50%;                 /* Position 50% from left */
+}

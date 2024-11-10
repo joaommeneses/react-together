@@ -27,7 +27,7 @@ function App() {
                             path="/student"
                             element={
                                 <ProtectedRoute>
-                                    <DrawingBoard />
+                                    <StudentPage/>
                                 </ProtectedRoute>
                             }
                         />

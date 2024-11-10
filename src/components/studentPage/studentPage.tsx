@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TopBar } from '@components/topbar';
 import './studentPage.scss';
+import { SessionManager } from 'react-together';
 
 export default function StudentPage() {
     const [link, setLink] = useState('');
