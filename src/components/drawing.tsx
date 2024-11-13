@@ -48,10 +48,15 @@ export function DrawingBoard() {
     const [drawerStack, setDrawerStack] = useStateTogether<string[]>('drawerStack', []);
     const leaveSession = useLeaveSession()
     const createRandomSession = useCreateRandomSession()
+    const [isProf, setIsProf] = useState(false);
 
+    if (currentUser) {
+        setIsProf(currentUser.name === 'Prof');
+    }
 
     var num_points = 0;
     const MOD = 3;
+
 
     useEffect(() => {
         if (context === null) {
@@ -200,7 +205,7 @@ export function DrawingBoard() {
 
     return (
         <div>
-            {drawerStack.map((drawer, index) => (
+            {isProf && drawerStack.map((drawer, index) => (
                 <div
                     key={index}
                     onClick={() => handleBoxClick(drawer)} // Remove from stack when clicked
